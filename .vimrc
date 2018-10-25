@@ -144,9 +144,6 @@ let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 " lightline.vim
 let g:lightline = {
   \ 'colorscheme': 'wombat',
-  \ 'inactive': {
-  \   'left': [ [ 'filename' ], ['modified' ] ]
-  \ },
   \ 'component': {
   \   'readonly': '%{&readonly?"":""}'
   \ },
@@ -156,6 +153,14 @@ let g:lightline = {
   \ 'separator': { 'left': "", 'right': "" },
   \ 'subseparator': { 'left': "", 'right': "" }
   \ }
+
+let g:lightline.active = {
+  \ 'left': [ [ 'mode', 'paste' ],
+  \           [ 'readonly', 'relativepath', 'modified' ] ],
+  \ 'right': [
+  \   [ 'linter_errors', 'linter_warnings', 'linter_ok' ],
+  \   [ 'lineinfo' ],
+  \   [ 'percent' ] ] }
 
 let g:lightline.component_expand = {
   \  'linter_warnings': 'lightline#ale#warnings',
@@ -168,8 +173,6 @@ let g:lightline.component_type = {
     \     'linter_errors': 'error',
     \     'linter_ok': 'left',
     \ }
-
-let g:lightline.active = { 'right': [[ 'linter_errors', 'linter_warnings', 'linter_ok' ]] }
 
 "vim-easyclip
 let g:EasyClipUseSubstituteDefaults=1
