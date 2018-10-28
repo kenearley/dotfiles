@@ -200,3 +200,8 @@ let g:netrw_banner         = 0
 let g:netrw_fastbrowse     = 2
 let g:netrw_special_syntax = 1
 let g:netrw_list_hide      = '\(^\|\s\s\)\zs\.\S\+'
+
+" Set ultisnips triggers
+let g:UltiSnipsExpandTrigger="<tab>"                                            
+let g:UltiSnipsJumpForwardTrigger="<tab>"                                       
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>" 
