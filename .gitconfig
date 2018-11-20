@@ -1,6 +1,6 @@
 [user]
 	name = Ken Earley
-	email = ken.earley@granicus.com
+	email = kearley@spscommerce.com
 [core]
 	editor = nvim
 	excludesfile = /Users/kearley/.gitignore_global

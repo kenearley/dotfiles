@@ -14,6 +14,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'maximbaz/lightline-ale'
 Plug 'mileszs/ack.vim'
 Plug 'junegunn/vim-easy-align'
+Plug 'christoomey/vim-sort-motion'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 Plug 'svermeulen/vim-easyclip'
@@ -126,6 +127,9 @@ nnoremap <Leader>a :Ack!<Space>
 " vim-easy-align
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
+
+" vim-sort-motion
+let g:sort_motion_flags = "ui"
 
 " hightlight .js files
 let g:jsx_ext_required = 0
