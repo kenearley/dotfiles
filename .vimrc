@@ -9,6 +9,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-rails'
 Plug 'w0rp/ale'
+Plug 'palantir/tslint'
 Plug 'altercation/vim-colors-solarized'
 Plug 'itchyny/lightline.vim'
 Plug 'maximbaz/lightline-ale'
@@ -17,6 +18,7 @@ Plug 'junegunn/vim-easy-align'
 Plug 'christoomey/vim-sort-motion'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
+Plug 'amadeus/vim-mjml'
 Plug 'svermeulen/vim-easyclip'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -25,6 +27,11 @@ Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'bogado/file-line'
 Plug 'nathanaelkane/vim-indent-guides'
+Plug 'leafgarland/typescript-vim'
+Plug 'bdauria/angular-cli.vim'
+Plug 'Quramy/tsuquyomi'
+Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+Plug 'ElmCast/elm-vim'
 
 call plug#end()
 
@@ -87,6 +94,8 @@ nnoremap gm m
 " insert mode
 inoremap <c-a> <esc>I
 inoremap <c-e> <esc>A
+inoremap jj <esc>j
+inoremap kk <esc>k
 
 " search
 set ignorecase
@@ -141,9 +150,17 @@ let g:netrw_liststyle=0
 nmap <space>p <Plug>(ale_previous_wrap)
 nmap <space>n <Plug>(ale_next_wrap)
 
+let g:ale_javascript_eslint_suppress_missing_config = 1
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_fix_on_save = 1
+
+let g:ale_fixers = {
+\   'typescript': ['prettier'],
+\   'javascript': ['prettier'],
+\   'css': ['prettier'],
+\}
 
 " lightline.vim
 let g:lightline = {
@@ -209,3 +226,11 @@ let g:netrw_list_hide      = '\(^\|\s\s\)\zs\.\S\+'
 let g:UltiSnipsExpandTrigger="<tab>"                                            
 let g:UltiSnipsJumpForwardTrigger="<tab>"                                       
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>" 
+
+" angular-cli
+autocmd VimEnter * if globpath('.,..','node_modules/@angular') != '' | call angular_cli#init() | endif
+
+" tsuquyomi
+let g:tsuquyomi_shortest_import_path = 1
+let g:tsuquyomi_disable_quickfix = 1
+let g:tsuquyomi_single_quote_import = 1
