@@ -9,8 +9,10 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-rails'
 Plug 'w0rp/ale'
-Plug 'palantir/tslint'
+Plug 'maximbaz/lightline-ale'
 Plug 'altercation/vim-colors-solarized'
+Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'tomasiser/vim-code-dark'
 Plug 'itchyny/lightline.vim'
 Plug 'maximbaz/lightline-ale'
 Plug 'mileszs/ack.vim'
@@ -28,11 +30,10 @@ Plug 'AndrewRadev/splitjoin.vim'
 Plug 'bogado/file-line'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'leafgarland/typescript-vim'
-Plug 'bdauria/angular-cli.vim'
-Plug 'Quramy/tsuquyomi'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'ElmCast/elm-vim'
 Plug 'terryma/vim-multiple-cursors'
+Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 
 call plug#end()
 
@@ -71,7 +72,7 @@ set nostartofline
 set noswapfile
 set noshowmode
 set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
-set guifont=Sauce\ Code\ Powerline\ Light:h16
+set guifont=Hack\ Nerd\ Font\ Mono:h14
 
 au FileType * set fo-=r fo-=o
 
@@ -151,16 +152,25 @@ let g:netrw_liststyle=0
 nmap <space>p <Plug>(ale_previous_wrap)
 nmap <space>n <Plug>(ale_next_wrap)
 
+" Prettier
+let g:prettier#config#trailing_comma = 'none'
+let g:prettier#config#single_quote = 'false'
+let g:prettier#config#bracket_spacing = 'true'
+let g:prettier#autoformat = 0
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml Prettier
+
 let g:ale_javascript_eslint_suppress_missing_config = 1
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_fix_on_save = 1
 
+let g:ale_linters = {
+\   'javascript': ['eslint'],
+\}
+
 let g:ale_fixers = {
-\   'typescript': ['prettier'],
 \   'javascript': ['prettier'],
-\   'css': ['prettier'],
 \}
 
 " lightline.vim
@@ -199,15 +209,16 @@ let g:lightline.component_type = {
 "vim-easyclip
 let g:EasyClipUseSubstituteDefaults=1
 
+set background=dark
+
 " theme settings
 let g:solarized_visibility='low'
 let g:solarized_termcolors=256
-set background=dark
-colorscheme solarized
+" colorscheme solarized
+colorscheme codedark
 
 highlight clear LineNr
 highlight clear SignColumn
-
 
 " indent_guides
 let g:indent_guides_enable_on_vim_startup = 1
@@ -227,11 +238,3 @@ let g:netrw_list_hide      = '\(^\|\s\s\)\zs\.\S\+'
 let g:UltiSnipsExpandTrigger="<tab>"                                            
 let g:UltiSnipsJumpForwardTrigger="<tab>"                                       
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>" 
-
-" angular-cli
-autocmd VimEnter * if globpath('.,..','node_modules/@angular') != '' | call angular_cli#init() | endif
-
-" tsuquyomi
-let g:tsuquyomi_shortest_import_path = 1
-let g:tsuquyomi_disable_quickfix = 1
-let g:tsuquyomi_single_quote_import = 1

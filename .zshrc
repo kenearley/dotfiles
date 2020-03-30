@@ -11,21 +11,21 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 # Customize to your needs...
+export GO111MODULE=on
+export GOPATH=$HOME/go
+export GOBIN=$GOPATH/bin
+export GOPROXY=https://proxy.golang.org,direct  
+export GOPRIVATE=github.com/frontendmasters/*
+export PATH=$PATH:/usr/local/go/bin:$GOBIN
 
-export OCI_DIR=/opt/oracle/instantclient_11_2
-export ORACLE_HOME=/opt/oracle/instantclient_11_2
-export DYLD_LIBRARY_PATH=/opt/oracle/instantclient_11_2
-export JAVA_HOME=/Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home
-export SUBLIME=/Applications/Sublime\ Text.app/Contents/SharedSupport/bin
-export PATH=$PATH:$SUBLIME
-export PATH=$PATH:$JAVA_HOME
-export PATH=$PATH:$OCI_DIR
-export PATH=$PATH:$ORACLE_HOME
-export PATH=$PATH:$DYLD_LIBRARY_PATH
+ulimit -n 4864
+ulimit -u 1418
+
+alias lc='colorls -1 --sd'
 
 alias vi="nvim"
 alias vim="nvim"
-alias vimrc="vim ~/.vimrc"
+alias vimrc="vim ~/.config/nvim/init.vim"
 alias preztorc="vim ~/.zpreztorc"
 alias gitconfig="vim ~/.gitconfig"
 alias zshrc="vim ~/.zshrc"
@@ -33,6 +33,15 @@ alias testunit="spring testunit"
 alias stree='/Applications/SourceTree.app/Contents/Resources/stree'
 
 alias evo_qc_console='~/bin/evo_qc_console'
+
+# autoload -Uz promptinit
+# promptinit
+# prompt agnoster
+# prompt_context() {
+#   if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
+#     prompt_segment black default "%(!.%{%F{yellow}%}.)$USER"
+#   fi
+# }
 
 # Setting ag as the default source for fzf
 export FZF_DEFAULT_COMMAND='ag -g ""'
@@ -70,8 +79,11 @@ zle -N zle-line-init
 zle -N zle-line-finish
 zle -N zle-keymap-select
 
+eval "$(rbenv init -)"
 eval "$(nodenv init -)"
-eval "$(rbenv init - zsh)"
+
 export PATH=./bin:./bin/developer:$PATH
 # source /usr/local/share/zsh/site-functions/_aws
+source $(dirname $(gem which colorls))/tab_complete.sh
+source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 
