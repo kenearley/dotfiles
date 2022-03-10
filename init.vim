@@ -7,7 +7,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-rails'
 Plug 'w0rp/ale'
 Plug 'maximbaz/lightline-ale'
 Plug 'altercation/vim-colors-solarized'
@@ -19,23 +18,28 @@ Plug 'mileszs/ack.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'christoomey/vim-sort-motion'
 Plug 'pangloss/vim-javascript'
+Plug 'evanleck/vim-svelte', {'branch': 'main'}
 Plug 'mxw/vim-jsx'
 Plug 'amadeus/vim-mjml'
 Plug 'svermeulen/vim-easyclip'
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
 Plug 'metakirby5/codi.vim'
 Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'bogado/file-line'
 Plug 'nathanaelkane/vim-indent-guides'
+Plug 'mattn/emmet-vim'
+Plug 'editorconfig/editorconfig-vim'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'wokalski/autocomplete-flow'
+Plug 'yardnsm/vim-import-cost', { 'do': 'npm install' }
+Plug 'chrisbra/matchit'
 Plug 'leafgarland/typescript-vim'
-Plug 'Shougo/vimproc.vim', {'do' : 'make'}
-Plug 'ElmCast/elm-vim'
-Plug 'terryma/vim-multiple-cursors'
-Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
-
-call plug#end()
+Plug 'ianks/vim-tsx'
+Plug 'airblade/vim-gitgutter'
+Plug 'romainl/vim-qf'
+Plug 'wsdjeg/vim-todo'
+Plug 'evansalter/vim-checklist'
+ call plug#end()
 
 filetype plugin indent on    " required
 syntax enable
@@ -46,7 +50,7 @@ set title
 set hidden
 set number
 set numberwidth=3
-set scrolloff=3
+set scrolloff=8
 set backspace=indent,eol,start
 set vb
 set nowrap
@@ -66,29 +70,25 @@ set splitbelow
 set splitright
 set list
 set listchars=tab:▸\ ,eol:↵ 
-set diffopt+=iwhite " ignore whitespace in diff
 set laststatus=2
 set nostartofline
 set noswapfile
 set noshowmode
 set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
 set guifont=Hack\ Nerd\ Font\ Mono:h14
+set completeopt=noinsert,menuone,noselect
 
 au FileType * set fo-=r fo-=o
 
 let mapleader = ","
+
+let g:typescript_indent_disable = 1
 
 nnoremap <leader><leader> <c-^> " Switch between the last two files
 map <leader>q :ccl<cr> " close qickfix window
 map <leader>r :redraw!<cr>
 
 command Chrome execute "!open -a 'Google Chrome' %"
-
-" window movements
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
 
 "normal mode
 nnoremap gm m
@@ -111,6 +111,21 @@ nnoremap <leader><space> :noh<cr>
 
 au BufNewFile,BufRead *.hbs set filetype=html
 
+" When the <Enter> key is pressed while the popup menu is visible, it only
+" hides the menu. Use this mapping to close the menu and also start a new
+" line.
+inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+
+" Use <TAB> to select the popup menu:
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" deoplete
+let g:deoplete#enable_at_startup = 1
+
+" neosnippet
+let g:neosnippet#enable_completed_snippet = 1
+
 " bufexplorer
 let g:bufExplorerShowDirectories=0
 let g:bufExplorerFindActive=0
@@ -132,7 +147,7 @@ let g:fzf_buffers_jump = 1
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
-cnoreabbrev Ack Ack!
+" cnoreabbrev Ack Ack!
 nnoremap <Leader>a :Ack!<Space>
 
 " vim-easy-align
@@ -152,18 +167,13 @@ let g:netrw_liststyle=0
 nmap <space>p <Plug>(ale_previous_wrap)
 nmap <space>n <Plug>(ale_next_wrap)
 
-" Prettier
-let g:prettier#config#trailing_comma = 'none'
-let g:prettier#config#single_quote = 'false'
-let g:prettier#config#bracket_spacing = 'true'
-let g:prettier#autoformat = 0
-autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml Prettier
-
 let g:ale_javascript_eslint_suppress_missing_config = 1
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_fix_on_save = 1
+
+let g:ale_linter_aliases = {'svelte': ['css', 'javascript']}
 
 let g:ale_linters = {
 \   'javascript': ['eslint'],
@@ -171,6 +181,11 @@ let g:ale_linters = {
 
 let g:ale_fixers = {
 \   'javascript': ['prettier'],
+\   'json': ['prettier'],
+\   'typescript': ['prettier'],
+\   'css': ['prettier'],
+\   'scss': ['prettier'],
+\   'svelte': ['prettier']
 \}
 
 " lightline.vim
@@ -234,7 +249,14 @@ let g:netrw_fastbrowse     = 2
 let g:netrw_special_syntax = 1
 let g:netrw_list_hide      = '\(^\|\s\s\)\zs\.\S\+'
 
-" Set ultisnips triggers
-let g:UltiSnipsExpandTrigger="<tab>"                                            
-let g:UltiSnipsJumpForwardTrigger="<tab>"                                       
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>" 
+"vim-qf
+nmap <F5> <Plug>(qf_qf_toggle)
+
+" vim-checklist
+nnoremap <leader>ct :ChecklistToggleCheckbox<cr>
+nnoremap <leader>ce :ChecklistEnableCheckbox<cr>
+nnoremap <leader>cd :ChecklistDisableCheckbox<cr>
+vnoremap <leader>ct :ChecklistToggleCheckbox<cr>
+vnoremap <leader>ce :ChecklistEnableCheckbox<cr>
+vnoremap <leader>cd :ChecklistDisableCheckbox<cr>
+

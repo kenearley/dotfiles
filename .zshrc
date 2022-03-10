@@ -29,8 +29,7 @@ alias vimrc="vim ~/.config/nvim/init.vim"
 alias preztorc="vim ~/.zpreztorc"
 alias gitconfig="vim ~/.gitconfig"
 alias zshrc="vim ~/.zshrc"
-alias testunit="spring testunit"
-alias stree='/Applications/SourceTree.app/Contents/Resources/stree'
+alias todo="vim ~/todo.md"
 
 alias evo_qc_console='~/bin/evo_qc_console'
 
@@ -80,10 +79,10 @@ zle -N zle-line-finish
 zle -N zle-keymap-select
 
 eval "$(rbenv init -)"
-eval "$(nodenv init -)"
 
 export PATH=./bin:./bin/developer:$PATH
 # source /usr/local/share/zsh/site-functions/_aws
 source $(dirname $(gem which colorls))/tab_complete.sh
 source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
-
+export VOLTA_HOME="$HOME/.volta"
+export PATH="$VOLTA_HOME/bin:$PATH"
